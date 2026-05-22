@@ -4,6 +4,8 @@ import time
 import argparse
 import torch
 import numpy as np
+import open3d as o3d
+import trimesh
 
 from net.network import Network
 from misc import get_logger, seed_all
@@ -31,6 +33,8 @@ def parse_arguments():
     parser.add_argument('--sparse_patches', type=eval, default=True, choices=[True, False],
                         help='evaluate on a sparse set of patches, given by a .pidx file containing the patch center point indices.')
     parser.add_argument('--save_pn', type=eval, default=False, choices=[True, False])
+    parser.add_argument('--save_xyz', type=eval, default=False, choices=[True, False])
+    parser.add_argument('--save_obj', type=eval, default=False, choices=[True, False])
     args = parser.parse_args()
     return args
 
@@ -281,6 +285,31 @@ def test(ckpt_dir, ckpt_iter):
                 if args.save_pn:
                     save_path = os.path.join(file_save_dir, test_dset.shape_names[shape_ind] + '.normals')
                     np.savetxt(save_path, normals_to_write, fmt='%.6f')
+
+                if args.save_xyz or args.save_obj:
+                    shape_name = test_dset.shape_names[shape_ind]
+                    data_dir = os.path.join(args.dataset_root, args.data_set)
+                    points = load_data(filedir=data_dir, filename=shape_name + '.xyz', dtype=np.float32)
+                    points = points[:, :3]
+                    pidx_path = os.path.join(data_dir, shape_name + '.pidx')
+                    if args.sparse_patches and os.path.exists(pidx_path):
+                        points_idx = load_data(filedir=data_dir, filename=shape_name + '.pidx', dtype=np.int32)
+                        points = points[points_idx, :]
+                    base_path = os.path.join(file_save_dir, shape_name)
+                    if args.save_xyz:
+                        pc_nor = np.concatenate([points, normals_to_write], axis=-1)
+                        np.savetxt(base_path + '.xyz', pc_nor, fmt='%.6f')
+                    if args.save_obj:
+                        pcd = o3d.geometry.PointCloud()
+                        pcd.points = o3d.utility.Vector3dVector(points.astype(np.float64))
+                        pcd.normals = o3d.utility.Vector3dVector(normals_to_write.astype(np.float64))
+                        o3d_mesh, _ = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=8)
+                        tm = trimesh.Trimesh(
+                            vertices=np.asarray(o3d_mesh.vertices),
+                            faces=np.asarray(o3d_mesh.triangles),
+                        )
+                        tm.export(base_path + '.obj')
+
                 logger.info('Save normal: {}'.format(save_path))
                 logger.info('Total Time: %.2f sec, Shape Num: %d / %d \n' % (total_time/1000, shape_ind+1, shape_num))
 

@@ -1,4 +1,5 @@
 import os
+import sys
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -11,7 +12,7 @@ parser.add_argument('--ckpt_iters', type=str, default='800')
 parser.add_argument('--resume', type=str, default='')
 FLAGS = parser.parse_args()
 
-dataset_root = '/data1/lq/Dataset/'
+dataset_root = '/home/hbcho/NeuralGF/dataset'
 gpu = FLAGS.gpu
 lr = 0.0009
 encode_knn = 16
@@ -23,9 +24,9 @@ if FLAGS.mode == 'train':
     trainset_list = 'trainingset_whitenoise'
     resume = FLAGS.resume
 
-    os.system('CUDA_VISIBLE_DEVICES={} python train.py --dataset_root={} --trainset_list={} --patch_size={} --batch_size={} \
+    os.system('CUDA_VISIBLE_DEVICES={} {} train.py --dataset_root={} --trainset_list={} --patch_size={} --batch_size={} \
                                                     --sample_size={} --encode_knn={} --lr={} --resume={}'.format(
-                gpu, dataset_root, trainset_list, train_patch_size, train_batch_size, sample_size, encode_knn, lr, resume))
+                gpu, sys.executable, dataset_root, trainset_list, train_patch_size, train_batch_size, sample_size, encode_knn, lr, resume))
 
 elif FLAGS.mode == 'test':
     tag = ''
@@ -76,9 +77,9 @@ elif FLAGS.mode == 'test':
         sample_size = 50
         tag = '%s-%s' % (test_patch_size, sample_size)
 
-    command = 'python test.py --gpu={} --dataset_root={} --data_set={} --log_root={} --ckpt_dirs={} --ckpt_iters={} --patch_size={} --batch_size={} \
+    command = '{} test.py --gpu={} --dataset_root={} --data_set={} --log_root={} --ckpt_dirs={} --ckpt_iters={} --patch_size={} --batch_size={} \
                                 --sample_size={} --encode_knn={} --save_pn={} --sparse_patches={} --tag={}'.format(
-            gpu, dataset_root, data_set, log_root, ckpt_dirs, ckpt_iters, test_patch_size, test_batch_size, sample_size, encode_knn, save_pn, sparse_patches, tag)
+            sys.executable, gpu, dataset_root, data_set, log_root, ckpt_dirs, ckpt_iters, test_patch_size, test_batch_size, sample_size, encode_knn, save_pn, sparse_patches, tag)
 
     os.system('{} --testset_list={} --eval_list {}'.format(command, testset_list, eval_list))
 
