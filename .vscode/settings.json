@@ -1,0 +1,87 @@
+{
+    "python.defaultInterpreterPath": "/home/hbcho/miniconda3/envs/torch3d_cuda118/bin/python",
+    // "python.defaultInterpreterPath": "/home/hbcho/miniconda3/envs/sap/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "off",
+    "files.associations": {
+        "*.py": "python"
+    },
+    "debug.console.fontSize": 12,
+    "debug.console.lineHeight": 18,
+    "debug.internalConsoleOptions": "neverOpen",
+    "python.analysis.exclude": [
+        "**/.*",
+        "**/node_modules",
+        "**/__pycache__",
+        "**/build",
+        "myenv/**",
+        "result*",
+        "**/*.ply",
+        "**/*.obj",
+        "**/*.npy",
+        "**/*.xyz",
+        "**/*.normals",
+        "**/*.pidx",
+        "server"
+    ],
+    "cursorpyright.analysis.autoImportCompletions": true,
+    "cursorpyright.analysis.exclude": [
+        "**/.*",
+        "**/node_modules",
+        "**/__pycache__",
+        "**/build",
+        "myenv/**",
+        "result*",
+        "**/*.ply",
+        "**/*.obj",
+        "**/*.npy",
+        "**/*.xyz",
+        "**/*.normals",
+        "**/*.pidx",
+        "server"
+    ],
+    "cursorpyright.analysis.typeCheckingMode": "off",
+    "editor.acceptSuggestionOnTab": false,
+    "editor.tabCompletion": "off",
+
+    "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/__pycache__/**": true,
+    "**/.venv/**": true,
+    "**/.env/**": true,
+    "**/venv/**": true,
+    "**/experiments_server/**": true,
+    "**/data/**": true,
+    "**/outputs/**": true,
+    "**/checkpoints/**": true,
+    "**/*.egg-info/**": true,
+    "**/build/**": true,
+    "**/dist/**": true
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "**/__pycache__": true,
+        "**/.venv": true,
+        "**/experiments_server": true,
+        "**/data": true,
+        "**/outputs": true,
+        "**/.git": true
+    },
+
+} 
