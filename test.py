@@ -291,6 +291,9 @@ def test(ckpt_dir, ckpt_iter):
                     data_dir = os.path.join(args.dataset_root, args.data_set)
                     points = load_data(filedir=data_dir, filename=shape_name + '.xyz', dtype=np.float32)
                     points = points[:, :3]
+                    shape_scale = np.max(points.max(axis=0) - points.min(axis=0))
+                    shape_center = (points.max(axis=0) + points.min(axis=0)) / 2
+                    points = (points - shape_center) / shape_scale
                     pidx_path = os.path.join(data_dir, shape_name + '.pidx')
                     if args.sparse_patches and os.path.exists(pidx_path):
                         points_idx = load_data(filedir=data_dir, filename=shape_name + '.pidx', dtype=np.int32)
